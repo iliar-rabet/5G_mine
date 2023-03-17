@@ -110,6 +110,18 @@ class OF():
         prob = (1 - Mult)
         return prob
 
+    def RSS(self, Z,i,j,currBS):
+        d=dist(currBS,Z,i,j)
+        return 10 * math.log(d/currBS["range"])
+
+    def SINR(self, Z,i,j,BS):
+        lsRSS = [self.RSS(Z,i,j,currBS) for currBS in BS]
+        S=sum(lsRSS)
+        lsSINR = [i/(S-i) for i in lsRSS]
+        print(lsSINR)
+        return max(lsRSS)
+            
+
 
     def Objective(self, TP,BS, log=0):
         Obj=0.0
@@ -120,6 +132,7 @@ class OF():
             for i in range(TP.max_x):
                 for j in range(TP.max_y):
                     point=self.Coverage_Prob(z,i,j,BS)
+                    print(SINR(z,i,j,BS))
                     period_sum = period_sum + point
                     Obj = Obj + point
             if log==1:
